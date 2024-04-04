@@ -25,7 +25,7 @@ class EBookServiceImpl(
     private fun resBook(name: String): ResEBookDto {
         val bookRes = repository.findByName(name)
         val genres: MutableList<String> = mutableListOf()
-        for(item in bookRes!!.genre){
+        for(item in bookRes!!.genre!!){
             val temp = genreService.getById(item).data
             temp?.name.let{genres.add(it!!)}
         }
@@ -94,20 +94,16 @@ class EBookServiceImpl(
         try {
             // Extract user type from token
             val userType = JwtGenerator().decodeJwt(token).get("type").toString()
-
             // Retrieve all books
             val books = repository.findAll()
-
             val res = mutableListOf<ResEBookDto>()
             for (book in books) {
                 val data = resBook(book.name!!)
-
                 // Filter based on user type
-                if (userType == "T001" && book.type == "T001") {
-                    // Only add T001 books for user type T001
-                    res.add(data)
+                if (userType == "T001") {
+                    if (book.type.toString() == "T001")
+                        res.add(data)
                 } else {
-                    // Add all other books
                     res.add(data)
                 }
             }
@@ -120,12 +116,15 @@ class EBookServiceImpl(
         }
     }
 
-//    override fun search(input: String): ResMessageDto<List<ResEBookDto>> {
-//        val genreResults = genreRepository.findByNameContaining(input)
-//            .map { ResEBookDto(id = null, name = null.toString(), author = null.toString(), type = null.toString(), genre = it.name) }
-//        val bookResults = repository.findByNameContaining(input)
-//            .map { ResEBookDto(name = it.name, author = it.author, type = it.type, genre = null) }
-//        val combinedResults = genreResults + bookResults
-//        return ResMessageDto(data = combinedResults)
-//    }
+    override fun searchBook(input: String): ResMessageDto<List<ResEBookDto>> {
+        val genre = genreRepository.findByName(input)
+        val books = mutableListOf<ResEBookDto>()
+        println(genre!!.id)
+        val searchData = repository.search(input, genre.id)
+        for(book in searchData){
+            val bookData = resBook(book.name!!)
+            books.add(bookData)
+        }
+        return ResMessageDto(data = books)
+    }
 }

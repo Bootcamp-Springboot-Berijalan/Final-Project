@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import kotlin.contracts.Returns
 
 @RestController
 @RequestMapping("\${rootLink.link}/ebook")
@@ -39,5 +40,11 @@ class EBookController(
         @RequestHeader token: String
     ): ResponseEntity<ResMessageDto<List<ResEBookDto>>>{
         return ResponseEntity.ok(eBookService.getAll(token))
+    }
+    @GetMapping("/search")
+    fun searchBook(
+        @RequestParam input: String
+    ): ResponseEntity<ResMessageDto<List<ResEBookDto>>>{
+        return ResponseEntity.ok(eBookService.searchBook(input))
     }
 }

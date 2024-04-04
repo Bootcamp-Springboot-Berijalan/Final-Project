@@ -3,6 +3,7 @@ package com.example.ProjectSpringboot.service.Impl
 import com.example.ProjectSpringboot.domain.dto.request.ReqFavoriteDto
 import com.example.ProjectSpringboot.domain.dto.response.ResFavoriteDto
 import com.example.ProjectSpringboot.domain.dto.response.ResMessageDto
+import com.example.ProjectSpringboot.domain.entity.EBookEntity
 import com.example.ProjectSpringboot.domain.entity.FavoriteEntity
 import com.example.ProjectSpringboot.repository.EBookRepository
 import com.example.ProjectSpringboot.repository.FavoriteRepository
@@ -12,6 +13,7 @@ import com.example.ProjectSpringboot.util.JwtGenerator
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.*
 
 @Service
 class FavoriteServiceImpl(
@@ -43,8 +45,8 @@ class FavoriteServiceImpl(
                 bookId = fav.bookId!!,
                 user = fav.userAdded!!
             )
-            if(user!!.type == "T001"){
-                if(eBookRepository.findById(fav.bookId!!).get().type == "T001"){
+            if(Objects.equals(user!!.type, "T001")  ){
+                if(Objects.equals(eBookRepository.findById(fav.bookId!!).get().type,"T001" )){
                     res.add(data)
                 }
             }else{

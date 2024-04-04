@@ -19,7 +19,7 @@ data class EBookEntity(
     @Column(name = "id_type")
     var type: String? = null,
     @Column(name = "id_genre")
-    var genre: List<Int>,
+    var genre: List<Int>? = null,
     @Column(name = "dt_added")
     var dtAdded: LocalDateTime? = null,
     @Column(name = "dt_updated")

@@ -10,7 +10,8 @@ class PathMatchingInterceptor(
 ): WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(authInterceptor).excludePathPatterns(
-            "/v1/api/final-project/user/login", "/v1/api/final-project/user/validate"
+            "/v1/api/final-project/user/login", "/v1/api/final-project/user/validate",
+            "/v1/api/final-project/user/create"
         )
     }
 }
